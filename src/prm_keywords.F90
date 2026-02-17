@@ -1,7 +1,7 @@
 function keyword_is_implemented(kw)
     implicit none 
 
-    character(len=*), parameter :: imp_kwd(72) = ["angle               ", &
+    character(len=*), parameter :: imp_kwd(73) = ["angle               ", &
                                                  "angle-cubic         ", &
                                                  "anglep              ", &
                                                  "angle-pentic        ", &
@@ -24,6 +24,7 @@ function keyword_is_implemented(kw)
                                                  "electric            ", &
                                                  "epsilonrule         ", &
                                                  "imptors             ", &
+                                                 "imptorunit          ", &
                                                  "induce-12-scale     ", &
                                                  "induce-13-scale     ", &
                                                  "induce-14-scale     ", &

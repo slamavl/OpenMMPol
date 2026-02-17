@@ -340,6 +340,10 @@ module mod_prm
                 end if
                 read(line(tokb:toke), *) classb(ibnd)
 
+                if(classa(ibnd) <= 0 .or. classb(ibnd) <= 0) then
+                    call fatal_error("Atomclasses <= 0 are not supported in bond.")
+                end if
+
                 tokb = toke + 1
                 toke = tokenize(line, tokb)
                 if(.not. isreal(line(tokb:toke))) then
@@ -497,6 +501,10 @@ module mod_prm
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) classc(iub)
+                
+                if(classa(iub) <= 0 .or. classb(iub) <= 0 .or. classc(iub) <= 0) then
+                    call fatal_error("Atomclasses <= 0 are not supported in Urey-Bradley.")
+                end if
 
                 tokb = toke + 1
                 toke = tokenize(line, tokb)
@@ -656,6 +664,10 @@ module mod_prm
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) classc(isb)
+                
+                if(classa(isb) <= 0 .or. classb(isb) <= 0 .or. classc(isb) <= 0) then
+                    call fatal_error("Atomclasses <= 0 are not supported in angle.")
+                end if
 
                 tokb = toke + 1
                 toke = tokenize(line, tokb)
@@ -941,6 +953,10 @@ module mod_prm
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) classd(iopb)
+                
+                if(classa(iopb) < 0 .or. classb(iopb) < 0 .or. classc(iopb) < 0 .or. classd(iopb) < 0) then
+                    call fatal_error("Atomclasses < 0 are not supported in OOP-Bending.")
+                end if
 
                 tokb = toke + 1
                 toke = tokenize(line, tokb)
@@ -1131,6 +1147,10 @@ module mod_prm
                 end if
                 read(line(tokb:toke), *) classb(ipitors)
                 
+                if(classa(ipitors) <= 0 .or. classb(ipitors) <= 0) then
+                    call fatal_error("Atomclasses <= 0 are not supported in pi-tors.")
+                end if
+                
                 tokb = toke + 1
                 toke = tokenize(line, tokb)
                 if(.not. isreal(line(tokb:toke))) then
@@ -1315,6 +1335,10 @@ module mod_prm
                 end if
                 read(line(tokb:toke), *) classd(it)
                 
+                if(classa(it) < 0 .or. classb(it) < 0 .or. classc(it) < 0 .or. classd(it) < 0) then
+                    call fatal_error("Atomclasses < 0 are not supported in torsion.")
+                end if
+                
                 ji = 1
                 t_n(:,it) = -1
                 do j=1, 6
@@ -1381,14 +1405,14 @@ module mod_prm
                         
                         done = .false.
                         do iprm=1, nt
-                            if((classa(iprm) == cla .and. &
-                                classb(iprm) == clb .and. &
-                                classc(iprm) == clc .and. &
-                                classd(iprm) == cld) .or. &
-                               (classa(iprm) == cld .and. &
-                                classb(iprm) == clc .and. &
-                                classc(iprm) == clb .and. &
-                                 classd(iprm) == cla)) then
+                            if(((classa(iprm) == cla .or. classa(iprm) == 0) .and. &
+                                (classb(iprm) == clb .or. classb(iprm) == 0) .and. &
+                                (classc(iprm) == clc .or. classc(iprm) == 0) .and. &
+                                (classd(iprm) == cld .or. classd(iprm) == 0)) .or. &
+                               ((classa(iprm) == cld .or. classa(iprm) == 0) .and. &
+                                (classb(iprm) == clc .or. classb(iprm) == 0) .and. &
+                                (classc(iprm) == clb .or. classc(iprm) == 0) .and. &
+                                (classd(iprm) == cla .or. classd(iprm) == 0))) then
                                 ! The parameter is ok
                                 
                                 ! Extrem check to avoid memory errors.
@@ -1458,11 +1482,11 @@ module mod_prm
         !! Bonded potential data structure
         character(len=OMMP_STR_CHAR_MAX), intent(in) :: prm_buf(:)
 
-        integer(ip) :: il, i, j, tokb, toke, it, nt, &
+        integer(ip) :: il, i, j, tokb, toke, it, nt, nprm, &
                        cla, clb, clc, cld, maxt, a, b, c, d, jb, jc, jd, iprm, ji, period
         character(len=OMMP_STR_CHAR_MAX) :: line, errstring
         integer(ip), allocatable :: classa(:), classb(:), classc(:), classd(:), &
-                                    t_n(:,:), tmpat(:,:), tmpprm(:)
+                                    t_n(:,:), tmpat(:,:), tmpprm(:), tmpbuf(:,:)
         real(rp), allocatable :: t_amp(:,:), t_pha(:,:)
         real(rp) :: amp, phase, imptorsion_unit = 1.0
         type(ommp_topology_type), pointer :: top
@@ -1500,11 +1524,11 @@ module mod_prm
         do il=1, size(prm_buf) 
             line = prm_buf(il)
                               
-            if(line(:12) == 'imptorsunit ') then
+            if(line(:12) == 'imptorunit ') then
                 tokb = 13
                 toke = tokenize(line, tokb)
                 if(.not. isreal(line(tokb:toke))) then
-                    write(errstring, *) "Wrong IMPTORSUNIT card"
+                    write(errstring, *) "Wrong IMPTORUNIT card"
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) imptorsion_unit
@@ -1541,6 +1565,10 @@ module mod_prm
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) classd(it)
+                
+                if(classa(it) < 0 .or. classb(it) < 0 .or. classc(it) < 0 .or. classd(it) < 0 ) then
+                    call fatal_error("Atomclasses < 0 are not supported in impropertorsion.")
+                end if
                 
                 ji = 1
                 t_n(:,it) = -1
@@ -1589,6 +1617,7 @@ module mod_prm
             i = i+1
         end do
 
+        nprm = it-1
         it = 1
         tmpat = 0
         
@@ -1609,11 +1638,29 @@ module mod_prm
             d = top%conn(1)%ci(jd)
             cld = top%atclass(d)
               
-            do iprm=1, nt
-                if((classc(iprm) == cla)) then
-                    if(clb == classa(iprm) .and. &
-                       clc == classb(iprm) .and. &
-                       cld == classd(iprm)) then
+            do iprm=1, nprm
+                ! Extrem check to avoid memory errors.
+                if(it + 6 > maxt) then
+                    call mallocate('assign_torsion [tmpbuf]', 4, maxt, tmpbuf)
+                    tmpbuf(:,:) = tmpat(:,:)
+                    call mfree('assign_torsion [tmpat]', tmpat)
+                    call mallocate('assign_torsion [tmpat]', 4, maxt+maxt+1, tmpat)
+                    tmpat(:,1:maxt) = tmpbuf(:,:)
+                    call mfree('assign_torsion [tmpbuf]', tmpbuf)
+
+                    call mallocate('assign_torsion [tmpbuf]', 1, maxt, tmpbuf)
+                    tmpbuf(1,:) = tmpprm(:)
+                    call mfree('assign_torsion [tmpprm]', tmpprm)
+                    call mallocate('assign_torsion [tmpprm]', maxt+maxt+1, tmpprm)
+                    tmpprm(1:maxt) = tmpbuf(1,:)
+                    call mfree('assign_torsion [tmpbuf]', tmpbuf)
+
+                    maxt = 2*maxt + 1
+                end if
+                if((classc(iprm) == cla .or. classc(iprm) == 0)) then
+                    if((clb == classa(iprm) .or. classa(iprm) == 0) .and. &
+                       (clc == classb(iprm) .or. classb(iprm) == 0) .and. &
+                       (cld == classd(iprm) .or. classd(iprm) == 0)) then
                         tmpat(1,it) = b
                         tmpat(2,it) = c
                         tmpat(3,it) = a
@@ -1621,9 +1668,9 @@ module mod_prm
                         tmpprm(it) = iprm
                         it = it + 1
                     end if
-                    if(clb == classa(iprm) .and. &
-                            cld == classb(iprm) .and. &
-                            clc == classd(iprm)) then
+                    if((clb == classa(iprm) .or. classa(iprm) == 0) .and. &
+                       (cld == classb(iprm) .or. classb(iprm) == 0).and. &
+                       (clc == classd(iprm) .or. classd(iprm) == 0)) then
                         tmpat(1,it) = b
                         tmpat(2,it) = d
                         tmpat(3,it) = a
@@ -1631,9 +1678,9 @@ module mod_prm
                         tmpprm(it) = iprm
                         it = it + 1
                     end if
-                    if(clc == classa(iprm) .and. &
-                            clb == classb(iprm) .and. &
-                            cld == classd(iprm)) then
+                    if((clc == classa(iprm) .or. classa(iprm) == 0) .and. &
+                       (clb == classb(iprm) .or. classb(iprm) == 0).and. &
+                       (cld == classd(iprm) .or. classd(iprm) == 0)) then
                         tmpat(1,it) = c
                         tmpat(2,it) = b
                         tmpat(3,it) = a
@@ -1641,9 +1688,9 @@ module mod_prm
                         tmpprm(it) = iprm
                         it = it + 1
                     end if
-                    if(clc == classa(iprm) .and. &
-                            cld == classb(iprm) .and. &
-                            clb == classd(iprm)) then
+                    if((clc == classa(iprm) .or. classa(iprm) == 0) .and. &
+                       (cld == classb(iprm) .or. classb(iprm) == 0).and. &
+                       (clb == classd(iprm) .or. classd(iprm) == 0)) then
                         tmpat(1,it) = c
                         tmpat(2,it) = d
                         tmpat(3,it) = a
@@ -1651,9 +1698,9 @@ module mod_prm
                         tmpprm(it) = iprm
                         it = it + 1
                     end if
-                    if(cld == classa(iprm) .and. &
-                            clb == classb(iprm) .and. &
-                            clc == classd(iprm)) then
+                    if((cld == classa(iprm) .or. classa(iprm) == 0) .and. &
+                       (clb == classb(iprm) .or. classb(iprm) == 0).and. &
+                       (clc == classd(iprm) .or. classd(iprm) == 0)) then
                         tmpat(1,it) = d
                         tmpat(2,it) = b
                         tmpat(3,it) = a
@@ -1661,9 +1708,9 @@ module mod_prm
                         tmpprm(it) = iprm
                         it = it + 1
                     end if
-                    if(cld == classa(iprm) .and. &
-                            clc == classb(iprm) .and. &
-                            clb == classd(iprm)) then
+                    if((cld == classa(iprm) .or. classa(iprm) == 0) .and. &
+                       (clc == classb(iprm) .or. classb(iprm) == 0).and. &
+                       (clb == classd(iprm) .or. classd(iprm) == 0)) then
                         tmpat(1,it) = d
                         tmpat(2,it) = c
                         tmpat(3,it) = a
@@ -1677,7 +1724,7 @@ module mod_prm
 
         call imptorsion_init(bds, it-1)
         do i=1, it-1
-           bds%imptorsionat(:,i) = tmpat(:,i) 
+           bds%imptorsionat(:,i) = tmpat(:,i)
            bds%imptorsamp(:,i) = t_amp(:,tmpprm(i)) * kcalmol2au * imptorsion_unit
            ! If more than one parameter is used for the same trigonal center,
            ! then do an average
@@ -1780,6 +1827,10 @@ module mod_prm
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) classd(it)
+                
+                if(classa(it) <= 0 .or. classb(it) <= 0 .or. classc(it) <= 0 .or. classd(it) <= 0 ) then
+                    call fatal_error("Atomclasses <= 0 are not supported in stretching-torsion.")
+                end if
                 
                 do j=1, 9
                     tokb = toke + 1
@@ -1971,6 +2022,10 @@ module mod_prm
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) classd(it)
+                
+                if(classa(it) <= 0 .or. classb(it) <= 0 .or. classc(it) <= 0 .or. classd(it) <= 0 ) then
+                    call fatal_error("Atomclasses <= 0 are not supported in angle-torsion.")
+                end if
                 
                 do j=1, 6
                     tokb = toke + 1
@@ -2226,6 +2281,10 @@ module mod_prm
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) classc(iang)
+                
+                if(classa(iang) <= 0 .or. classb(iang) <= 0 .or. classc(iang) <= 0) then
+                    call fatal_error("Atomclasses <= 0 are not supported in angle.")
+                end if
 
                 tokb = toke + 1
                 toke = tokenize(line, tokb)
@@ -2354,6 +2413,10 @@ module mod_prm
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) classc(iang)
+                
+                if(classa(iang) <= 0 .or. classb(iang) <= 0 .or. classc(iang) <= 0) then
+                    call fatal_error("Atomclasses <= 0 are not supported in anglep.")
+                end if
                 
                 tokb = toke + 1
                 toke = tokenize(line, tokb)
@@ -3543,7 +3606,7 @@ module mod_prm
                         else
                             write(errstring, "(A, I0, A, I0, A, F8.4, A)") &
                                 "Atom ", i, " is assigned multipole set ", j, ' [q: ', &
-                                eel%q(1,j), "]"
+                                eel%q(1,i), "]"
                         end if
                         call ommp_message(errstring, OMMP_VERBOSE_DEBUG)
                         !$omp end critical
@@ -3667,6 +3730,10 @@ module mod_prm
                     call fatal_error(errstring)
                 end if
                 read(line(tokb:toke), *) classx(5,itt)
+                
+                if(any(classx(:,itt) <= 0) ) then
+                    call fatal_error("Atomclasses <= 0 are not supported in torsion-torsion.")
+                end if
 
                 tokb = toke+1
                 toke = tokenize(line, tokb)
