@@ -1710,14 +1710,30 @@ module mod_electrostatics
         if(eel%use_fmm) then
             call preapare_fmm_static(eel)
 
-            ! TODO !
-            !$omp parallel do default(shared)
+            !$omp parallel do default(shared) schedule(dynamic) &
+            !$omp private(i,tmpV,tmpE,tmpEgr,tmpHE)
             do i=1, top%mm_atoms 
+                !call cart_propfar_at_ipart(eel%fmm_static, i, &
+                !                        do_V, eel%V_M2M(i), &
+                !                        do_E, eel%E_M2M(:,i), &
+                !                        do_Egrd, eel%Egrd_M2M(:,i), &
+                !                        do_EHes, eel%EHes_M2M(:,i))
+                
+                if(do_V) tmpV = 0.0
+                if(do_E) tmpE = 0.0
+                if(do_Egrd) tmpEgr = 0.0
+                if(do_EHes) tmpHE = 0.0
+
                 call cart_propfar_at_ipart(eel%fmm_static, i, &
-                                        do_V, eel%V_M2M(i), &
-                                        do_E, eel%E_M2M(:,i), &
-                                        do_Egrd, eel%Egrd_M2M(:,i), &
-                                        do_EHes, eel%EHes_M2M(:,i))
+                                        do_V, tmpV, &
+                                        do_E, tmpE, &
+                                        do_Egrd, tmpEgr, &
+                                        do_EHes, tmpHE)
+
+                if(do_V) eel%V_M2M(i) = eel%V_M2M(i) + tmpV
+                if(do_E) eel%E_M2M(:,i) = eel%E_M2M(:,i) + tmpE
+                if(do_Egrd) eel%Egrd_M2M(:,i) = eel%Egrd_M2M(:,i) + tmpEgr
+                if(do_EHes) eel%EHes_M2M(:,i) = eel%EHes_M2M(:,i) + tmpHE
             end do
 
             if(allocated(eel%list_S_S_fmm_far)) then
@@ -2139,13 +2155,13 @@ module mod_electrostatics
         end if
 
         if(do_EHes) then
-            ikernel = 5 
+            ikernel = 4 
         elseif(do_Egrd) then
-            ikernel = 4
-        elseif(do_E) then
             ikernel = 3
-        elseif(do_V) then
+        elseif(do_E) then
             ikernel = 2
+        elseif(do_V) then
+            ikernel = 1
         else
             return
         end if
@@ -2153,17 +2169,31 @@ module mod_electrostatics
         if(eel%use_fmm) then
             call prepare_fmm_ipd(eel, knd)
 
-
             !$omp parallel do default(shared) schedule(dynamic) &
             !$omp private(i,j,ij,ipol,jpol,idx,dr,kernel,to_do,to_scale,scalf,tmpV,tmpE,tmpEgr,tmpHE) 
             do ipol=1, eel%pol_atoms 
-                i = eel%polar_mm(ipol)
+                if(do_V) tmpV = 0.0
+                if(do_E) tmpE = 0.0
+                if(do_Egrd) tmpEgr = 0.0
+                if(do_EHes) tmpHE = 0.0
                 
+                i = eel%polar_mm(ipol)
+               
                 call cart_propfar_at_ipart(eel%fmm_ipd(knd), i, &
-                                           do_V, eel%V_D2D(ipol,knd), &
-                                           do_E, eel%E_D2D(:,ipol,knd), &
-                                           do_Egrd, eel%Egrd_D2D(:,ipol,knd), &
-                                           do_EHes, eel%EHes_D2D(:,ipol,knd))
+                                           !do_V, eel%V_D2D(ipol,knd), &
+                                           !do_E, eel%E_D2D(:,ipol,knd), &
+                                           !do_Egrd, eel%Egrd_D2D(:,ipol,knd), &
+                                           !do_EHes, eel%EHes_D2D(:,ipol,knd))
+                                           do_V, tmpV, &
+                                           do_E, tmpE, &
+                                           do_Egrd, tmpEgr, &
+                                           do_EHes, tmpHE)
+                
+                if(do_V) eel%V_D2D(ipol,knd) = eel%V_D2D(ipol,knd) + tmpV
+                if(do_E) eel%E_D2D(:,ipol,knd) = eel%E_D2D(:,ipol,knd) + tmpE
+                if(do_Egrd) eel%Egrd_D2D(:,ipol,knd) = eel%Egrd_D2D(:,ipol,knd) + tmpEgr
+                if(do_EHes) eel%EHes_D2D(:,ipol,knd) = eel%EHes_D2D(:,ipol,knd) + tmpHE
+                
 
                 ! Near field is computed internally because dumped kernel is required
                 do ij=eel%fmm_near_field_list%ri(i), eel%fmm_near_field_list%ri(i+1)-1
@@ -2353,12 +2383,23 @@ module mod_electrostatics
             !$omp parallel do default(shared) schedule(dynamic) &
             !$omp private(i,j,ij,ipol,idx,dr,kernel,to_do_p,to_do_d,to_scale_p,to_scale_d,scalf_p,scalf_d,tmpV,tmpE,tmpEgr,tmpHE) 
             do ipol=1, eel%pol_atoms 
+                if(do_V) tmpV = 0.0
+                if(do_E) tmpE = 0.0
+                if(do_Egrd) tmpEgr = 0.0
+                if(do_EHes) tmpHE = 0.0
+                
                 i = eel%polar_mm(ipol)
                 call cart_propfar_at_ipart(eel%fmm_static, i, &
-                                           do_V, eel%V_M2D(ipol, _amoeba_D_), &
-                                           do_E, eel%E_M2D(:, ipol, _amoeba_D_), &
-                                           do_Egrd, eel%Egrd_M2D(:, ipol, _amoeba_D_), &
-                                           do_EHes, eel%EHes_M2D(:, ipol, _amoeba_D_))
+                                           do_V, tmpV, &
+                                           do_E, tmpE, &
+                                           do_Egrd, tmpEgr, &
+                                           do_EHes, tmpHE)
+
+                if(do_V) eel%V_M2D(ipol, _amoeba_D_) = eel%V_M2D(ipol, _amoeba_D_) + tmpV
+                if(do_E) eel%E_M2D(:, ipol, _amoeba_D_) = eel%E_M2D(:, ipol, _amoeba_D_) + tmpE
+                if(do_Egrd) eel%Egrd_M2D(:, ipol, _amoeba_D_) = eel%Egrd_M2D(:, ipol, _amoeba_D_) + tmpEgr
+                if(do_EHes) eel%EHes_M2D(:, ipol, _amoeba_D_) = eel%EHes_M2D(:, ipol, _amoeba_D_) + tmpHE
+                
                 if(eel%amoeba) then
                     if(do_V) eel%V_M2D(ipol, _amoeba_P_) = eel%V_M2D(ipol, _amoeba_D_)
                     if(do_E) eel%E_M2D(:, ipol, _amoeba_P_) = eel%E_M2D(:, ipol, _amoeba_D_)
@@ -2790,13 +2831,26 @@ module mod_electrostatics
             !$omp parallel do default(shared) schedule(dynamic) &
             !$omp private(i,j,ij,jpol,idx,dr,kernel,to_do,to_scale,scalf,tmpV,tmpE,tmpEgr,tmpHE) 
             do i=1, top%mm_atoms
-                
+                if(do_V) tmpV = 0.0
+                if(do_E) tmpE = 0.0
+                if(do_Egrd) tmpEgr = 0.0
+                if(do_EHes) tmpHE = 0.0
+               
                 call cart_propfar_at_ipart(eel%fmm_ipd(knd), i, &
-                                           do_V, eel%V_D2M(i), &
-                                           do_E, eel%E_D2M(:,i), &
-                                           do_Egrd, eel%Egrd_D2M(:,i), &
-                                           do_EHes, eel%EHes_D2M(:,i))
-
+                !                           do_V, eel%V_D2M(i), &
+                !                           do_E, eel%E_D2M(:,i), &
+                !                           do_Egrd, eel%Egrd_D2M(:,i), &
+                !                           do_EHes, eel%EHes_D2M(:,i))
+                                           do_V, tmpV, &
+                                           do_E, tmpE, &
+                                           do_Egrd, tmpEgr, &
+                                           do_EHes, tmpHE)
+                
+                if(do_V) eel%V_D2M(i) = eel%V_D2M(i) + tmpV
+                if(do_E) eel%E_D2M(:,i) = eel%E_D2M(:,i) + tmpE
+                if(do_Egrd) eel%Egrd_D2M(:,i) = eel%Egrd_D2M(:,i) + tmpEgr
+                if(do_EHes) eel%EHes_D2M(:,i) = eel%EHes_D2M(:,i) + tmpHE
+                
                 ! Near field is computed internally because dumped kernel is required
                 do ij=eel%fmm_near_field_list%ri(i), eel%fmm_near_field_list%ri(i+1)-1
                     j = eel%fmm_near_field_list%ci(ij)
@@ -2804,7 +2858,7 @@ module mod_electrostatics
                     ! If the atom is not polarizable, skip
                     if(jpol < 1) cycle 
 
-                    if(screening_type == 'P') then
+                    if(screening_type == 'P' .or. screening_type == '-') then
                         to_do = .true.
                         to_scale = .false.
                         scalf = 1.0
@@ -2834,7 +2888,6 @@ module mod_electrostatics
                                 exit
                             end if
                         end do
-
                         !If it should set the correct variables
                         if(to_scale) then
                             to_do = eel%todo_S_P_D(idx)
