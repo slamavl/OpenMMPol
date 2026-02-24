@@ -665,8 +665,8 @@ module mod_prm
                 end if
                 read(line(tokb:toke), *) classc(isb)
                 
-                if(classa(isb) <= 0 .or. classb(isb) <= 0 .or. classc(isb) <= 0) then
-                    call fatal_error("Atomclasses <= 0 are not supported in angle.")
+                if(classa(isb) < 0 .or. classb(isb) < 0 .or. classc(isb) < 0) then
+                    call fatal_error("Atomclasses < 0 are not supported in strbnd.")
                 end if
 
                 tokb = toke + 1
@@ -707,12 +707,12 @@ module mod_prm
                     done = .false.
 
                     do j=1, nstrbnd
-                        if((cla == classa(j) &
-                            .and. clb == classc(j) &
-                            .and. clc == classb(j)) .or. &
-                           (clb == classa(j) &
-                            .and. cla == classc(j) &
-                            .and. clc == classb(j))) then
+                        if(((cla == classa(j) .or. classa(j) == 0)&
+                            .and. (clb == classc(j) .or. classc(j) == 0) &
+                            .and. (clc == classb(j) .or. classb(j) == 0)) .or. &
+                           ((clb == classa(j) .or. classa(j) == 0) &
+                            .and. (cla == classc(j) .or. classc(j) == 0) &
+                            .and. (clc == classb(j) .or. classb(j) == 0))) then
                             sbattmp(1,isb) = a
                             sbattmp(2,isb) = c
                             sbattmp(3,isb) = b
