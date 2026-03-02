@@ -3584,6 +3584,8 @@ module mod_electrostatics
             call free_fmm(eel%fmm_ipd(i))
             call fmm_init(eel%fmm_ipd(i), eel%fmm_maxl_pol, eel%tree)
         end do
+        eel%fmm_static_done = .false.
+        eel%fmm_ipd_done = .false.
         call time_pull("FMM initialization")
     end subroutine
 
