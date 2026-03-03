@@ -30,7 +30,7 @@ set(C_FLAGS_RELEASE "-O2 -funroll-all-loops"
 set(C_FLAGS_RELWITDEBINFO "-g ${C_FLAGS_RELEASE}"
   CACHE STRING  "C compiler flags for RelWithDebInfo build")
 
-set(C_FLAGS_DEBUG "-g -Wall -pedantic -fbounds-check"
+set(C_FLAGS_DEBUG "-g -Wall -pedantic -fbounds-check -fsanitize=address,leak,undefined "
   CACHE STRING "C compiler flags for Debug build")
 
 set(C_FLAGS_COVERAGE "-O0 -g --coverage")
