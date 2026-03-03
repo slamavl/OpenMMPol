@@ -167,6 +167,8 @@ contains
         
         t%children(:,:) = 0
         t%particle_list%ri(1) = 1
+        t%node_dimension(:) = 0.0
+
         do i=1, t%n_nodes
             if(i > 1) t%node_level(i) = t%node_level(t%parent(i)) + 1
             !t%node_dimension(i) = maxval(n_dimension(:,i)) * 0.7072 !sqrt(2.0) / 2.0
@@ -194,6 +196,7 @@ contains
         call populate_leaf_list(t)
         
         do i=1, t%n_nodes
+            ! If the node is a leaf
             if(all(t%children(:,i) == 0)) then
                 t%node_dimension(i) = norm2(n_dimension(:,i)) / 2.0
             end if 
