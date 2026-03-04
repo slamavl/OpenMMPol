@@ -1782,6 +1782,12 @@ module mod_electrostatics
             !$omp parallel do default(shared) schedule(dynamic) &
             !$omp private(i,j,idx,sidx,to_scale,to_do,scalf,dr,kernel,tmpV,tmpE,tmpEgr,tmpHE)
             do i=1, top%mm_atoms
+
+                if(do_V) tmpV = 0.0_rp
+                if(do_E) tmpE = 0.0_rp
+                if(do_Egrd) tmpEgr = 0.0_rp
+                if(do_EHes) tmpHE = 0.0_rp
+
                 do idx=eel%fmm_near_field_list%ri(i), &
                        eel%fmm_near_field_list%ri(i+1)-1
                     j = eel%fmm_near_field_list%ci(idx)
@@ -1808,36 +1814,33 @@ module mod_electrostatics
                         dr = top%cmm(:,i) - top%cmm(:, j)
                         call coulomb_kernel(dr, ikernel, kernel)
                         
-                        if(do_V) tmpV = 0.0_rp
-                        if(do_E) tmpE = 0.0_rp
-                        if(do_Egrd) tmpEgr = 0.0_rp
-                        if(do_EHes) tmpHE = 0.0_rp
-
-                        call q_elec_prop(eel%q(1,j), dr, kernel, &
+                        call q_elec_prop(eel%q(1,j) * scalf, dr, kernel, &
                                             do_V, tmpV, & 
                                             do_E, tmpE, &
                                             do_Egrd, tmpEgr, &
                                             do_EHes, tmpHE)
                         if(eel%amoeba) then
-                            call mu_elec_prop(eel%q(2:4,j), dr, kernel, &
+                            call mu_elec_prop(eel%q(2:4,j) * scalf, dr, kernel, &
                                                 do_V, tmpV, & 
                                                 do_E, tmpE, &
                                                 do_Egrd, tmpEgr, &
                                                 do_EHes, tmpHE)
 
-                            call quad_elec_prop(eel%q(5:10,j), dr, kernel, &
+                            call quad_elec_prop(eel%q(5:10,j) * scalf, dr, kernel, &
                                                 do_V, tmpV, & 
                                                 do_E, tmpE, &
                                                 do_Egrd, tmpEgr, &
                                                 do_EHes, tmpHE)
                         end if
-
-                        if(do_V) eel%V_M2M(i) = eel%V_M2M(i) + tmpV * scalf
-                        if(do_E) eel%E_M2M(:,i) = eel%E_M2M(:,i) + tmpE * scalf
-                        if(do_Egrd) eel%Egrd_M2M(:,i) = eel%Egrd_M2M(:,i) + tmpEgr * scalf
-                        if(do_EHes) eel%EHes_M2M(:,i) = eel%EHes_M2M(:,i) + tmpHE * scalf
-                    end if
+                        
+                        end if
                 end do
+
+                if(do_V) eel%V_M2M(i) = eel%V_M2M(i) + tmpV
+                if(do_E) eel%E_M2M(:,i) = eel%E_M2M(:,i) + tmpE
+                if(do_Egrd) eel%Egrd_M2M(:,i) = eel%Egrd_M2M(:,i) + tmpEgr
+                if(do_EHes) eel%EHes_M2M(:,i) = eel%EHes_M2M(:,i) + tmpHE
+
             end do
         else
         if(eel%amoeba) then
