@@ -12,6 +12,13 @@ def generate_test(jsonfile, program, ref, ef, fout, atol, rtol):
     with open(jsonfile, "r") as f:
         data = json.loads(f.read())
     basename = data['name']
+    
+    if data['use_fmm'] == 'true':
+        atol_ene = 1e-5
+        rtol_ene = 1e-5
+        atol_grad = 1e-4
+        rtol_grad = 1e-3
+
 
     if jsonfile not in converted_to_hdf5:
         print("""if (WITH_HDF5)

@@ -5,5 +5,6 @@
         "path": "tests/1crn/input_WANG_AL.mmp",
         "md5sum": "fd403ad767402146482c735e67eba828"
     },
-    "verbosity": "high"
+    "verbosity": "high",
+    "use_fmm": "false"
 }

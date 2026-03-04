@@ -9,5 +9,6 @@
         "path": "amber99sb.prm",
         "md5sum": "e9330e340a3f4045cc8025dc9ce42e33"
     },
-    "verbosity": "high"
+    "verbosity": "high",
+    "use_fmm": "false"
 }

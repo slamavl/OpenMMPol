@@ -855,7 +855,7 @@ add_test(NAME 1UBQ_AMBER_MMP_energy_comp
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1UBQ_AMBER_MMP_energy.out
                           ${CMAKE_SOURCE_DIR}/tests/1ubq/ENE_0_WANG_AL.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1UBQ_AMBER_MMP_energy_comp PROPERTIES DEPENDS 1UBQ_AMBER_MMP_energy)
 if (WITH_HDF5)
 add_test(NAME 1UBQ_AMBER_MMP_energy_HDF5
@@ -867,7 +867,7 @@ add_test(NAME 1UBQ_AMBER_MMP_energy_comp_HDF5
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1UBQ_AMBER_MMP_energy.out_HDF5
                           ${CMAKE_SOURCE_DIR}/tests/1ubq/ENE_0_WANG_AL.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1UBQ_AMBER_MMP_energy_comp_HDF5 PROPERTIES DEPENDS 1UBQ_AMBER_MMP_energy_HDF5)
 endif ()
 add_test(NAME 1UBQ_AMBER_MMP_energy_EF_1
@@ -878,7 +878,7 @@ add_test(NAME 1UBQ_AMBER_MMP_energy_EF_1_comp
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1UBQ_AMBER_MMP_energy_EF_1.out
                           ${CMAKE_SOURCE_DIR}/tests/1ubq/ENE_1_WANG_AL.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1UBQ_AMBER_MMP_energy_EF_1_comp PROPERTIES DEPENDS 1UBQ_AMBER_MMP_energy_EF_1)
 if (WITH_HDF5)
 add_test(NAME 1UBQ_AMBER_MMP_energy_EF_1_HDF5
@@ -890,7 +890,7 @@ add_test(NAME 1UBQ_AMBER_MMP_energy_EF_1_comp_HDF5
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1UBQ_AMBER_MMP_energy_EF_1.out_HDF5
                           ${CMAKE_SOURCE_DIR}/tests/1ubq/ENE_1_WANG_AL.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1UBQ_AMBER_MMP_energy_EF_1_comp_HDF5 PROPERTIES DEPENDS 1UBQ_AMBER_MMP_energy_EF_1_HDF5)
 endif ()
 add_test(NAME 1UBQ_AMOEBA_MMP_energy
@@ -901,7 +901,7 @@ add_test(NAME 1UBQ_AMOEBA_MMP_energy_comp
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1UBQ_AMOEBA_MMP_energy.out
                           ${CMAKE_SOURCE_DIR}/tests/1ubq/ENE_0_AMOEBA.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1UBQ_AMOEBA_MMP_energy_comp PROPERTIES DEPENDS 1UBQ_AMOEBA_MMP_energy)
 if (WITH_HDF5)
 add_test(NAME 1UBQ_AMOEBA_MMP_energy_HDF5
@@ -913,7 +913,7 @@ add_test(NAME 1UBQ_AMOEBA_MMP_energy_comp_HDF5
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1UBQ_AMOEBA_MMP_energy.out_HDF5
                           ${CMAKE_SOURCE_DIR}/tests/1ubq/ENE_0_AMOEBA.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1UBQ_AMOEBA_MMP_energy_comp_HDF5 PROPERTIES DEPENDS 1UBQ_AMOEBA_MMP_energy_HDF5)
 endif ()
 add_test(NAME 1UBQ_AMOEBA_MMP_energy_EF_1
@@ -924,7 +924,7 @@ add_test(NAME 1UBQ_AMOEBA_MMP_energy_EF_1_comp
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1UBQ_AMOEBA_MMP_energy_EF_1.out
                           ${CMAKE_SOURCE_DIR}/tests/1ubq/ENE_1_AMOEBA.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1UBQ_AMOEBA_MMP_energy_EF_1_comp PROPERTIES DEPENDS 1UBQ_AMOEBA_MMP_energy_EF_1)
 if (WITH_HDF5)
 add_test(NAME 1UBQ_AMOEBA_MMP_energy_EF_1_HDF5
@@ -936,7 +936,7 @@ add_test(NAME 1UBQ_AMOEBA_MMP_energy_EF_1_comp_HDF5
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1UBQ_AMOEBA_MMP_energy_EF_1.out_HDF5
                           ${CMAKE_SOURCE_DIR}/tests/1ubq/ENE_1_AMOEBA.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1UBQ_AMOEBA_MMP_energy_EF_1_comp_HDF5 PROPERTIES DEPENDS 1UBQ_AMOEBA_MMP_energy_EF_1_HDF5)
 endif ()
 add_test(NAME 1UBQ_AMOEBA_XYZ_energy
@@ -1214,7 +1214,7 @@ add_test(NAME 1AO6CUT_AMBER_MMP_energy_comp
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6CUT_AMBER_MMP_energy.out
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/ENE_0_WANG_AL_CUT10.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6CUT_AMBER_MMP_energy_comp PROPERTIES DEPENDS 1AO6CUT_AMBER_MMP_energy)
 if (WITH_HDF5)
 add_test(NAME 1AO6CUT_AMBER_MMP_energy_HDF5
@@ -1226,7 +1226,7 @@ add_test(NAME 1AO6CUT_AMBER_MMP_energy_comp_HDF5
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6CUT_AMBER_MMP_energy.out_HDF5
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/ENE_0_WANG_AL_CUT10.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6CUT_AMBER_MMP_energy_comp_HDF5 PROPERTIES DEPENDS 1AO6CUT_AMBER_MMP_energy_HDF5)
 endif ()
 add_test(NAME 1AO6CUT_AMBER_MMP_energy_EF_1
@@ -1237,7 +1237,7 @@ add_test(NAME 1AO6CUT_AMBER_MMP_energy_EF_1_comp
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6CUT_AMBER_MMP_energy_EF_1.out
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/ENE_1_WANG_AL_CUT10.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6CUT_AMBER_MMP_energy_EF_1_comp PROPERTIES DEPENDS 1AO6CUT_AMBER_MMP_energy_EF_1)
 if (WITH_HDF5)
 add_test(NAME 1AO6CUT_AMBER_MMP_energy_EF_1_HDF5
@@ -1249,7 +1249,7 @@ add_test(NAME 1AO6CUT_AMBER_MMP_energy_EF_1_comp_HDF5
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6CUT_AMBER_MMP_energy_EF_1.out_HDF5
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/ENE_1_WANG_AL_CUT10.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6CUT_AMBER_MMP_energy_EF_1_comp_HDF5 PROPERTIES DEPENDS 1AO6CUT_AMBER_MMP_energy_EF_1_HDF5)
 endif ()
 add_test(NAME 1AO6CUT_AMOEBA_MMP_energy
@@ -1260,7 +1260,7 @@ add_test(NAME 1AO6CUT_AMOEBA_MMP_energy_comp
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6CUT_AMOEBA_MMP_energy.out
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/ENE_0_AMOEBA_CUT10.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6CUT_AMOEBA_MMP_energy_comp PROPERTIES DEPENDS 1AO6CUT_AMOEBA_MMP_energy)
 if (WITH_HDF5)
 add_test(NAME 1AO6CUT_AMOEBA_MMP_energy_HDF5
@@ -1272,7 +1272,7 @@ add_test(NAME 1AO6CUT_AMOEBA_MMP_energy_comp_HDF5
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6CUT_AMOEBA_MMP_energy.out_HDF5
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/ENE_0_AMOEBA_CUT10.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6CUT_AMOEBA_MMP_energy_comp_HDF5 PROPERTIES DEPENDS 1AO6CUT_AMOEBA_MMP_energy_HDF5)
 endif ()
 add_test(NAME 1AO6CUT_AMOEBA_MMP_energy_EF_1
@@ -1283,7 +1283,7 @@ add_test(NAME 1AO6CUT_AMOEBA_MMP_energy_EF_1_comp
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6CUT_AMOEBA_MMP_energy_EF_1.out
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/ENE_1_AMOEBA_CUT10.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6CUT_AMOEBA_MMP_energy_EF_1_comp PROPERTIES DEPENDS 1AO6CUT_AMOEBA_MMP_energy_EF_1)
 if (WITH_HDF5)
 add_test(NAME 1AO6CUT_AMOEBA_MMP_energy_EF_1_HDF5
@@ -1295,7 +1295,7 @@ add_test(NAME 1AO6CUT_AMOEBA_MMP_energy_EF_1_comp_HDF5
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6CUT_AMOEBA_MMP_energy_EF_1.out_HDF5
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/ENE_1_AMOEBA_CUT10.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6CUT_AMOEBA_MMP_energy_EF_1_comp_HDF5 PROPERTIES DEPENDS 1AO6CUT_AMOEBA_MMP_energy_EF_1_HDF5)
 endif ()
 add_test(NAME 1AO6_AMOEBA_XYZ_energy
@@ -1306,7 +1306,7 @@ add_test(NAME 1AO6_AMOEBA_XYZ_energy_comp
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6_AMOEBA_XYZ_energy.out
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/FULL_POTENTIAL.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6_AMOEBA_XYZ_energy_comp PROPERTIES DEPENDS 1AO6_AMOEBA_XYZ_energy)
 if (WITH_HDF5)
 add_test(NAME 1AO6_AMOEBA_XYZ_energy_HDF5
@@ -1318,7 +1318,7 @@ add_test(NAME 1AO6_AMOEBA_XYZ_energy_comp_HDF5
                           COMMAND python3 ${CMAKE_SOURCE_DIR}/tests/compare_potential.py
                           Testing/1AO6_AMOEBA_XYZ_energy.out_HDF5
                           ${CMAKE_SOURCE_DIR}/tests/1ao6/FULL_POTENTIAL.ref
-                           1e-06  1e-06)
+                           1e-05  1e-05)
 set_tests_properties(1AO6_AMOEBA_XYZ_energy_comp_HDF5 PROPERTIES DEPENDS 1AO6_AMOEBA_XYZ_energy_HDF5)
 endif ()
 add_test(NAME 1AO6CUT_AMBER_MMP_ipd

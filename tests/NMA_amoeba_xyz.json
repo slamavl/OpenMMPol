@@ -11,5 +11,6 @@
     },
     "verbosity": "high",
     "ignore_duplicated_prm": "true",
-    "ignore_duplicated_angle_prm": "true"
+    "ignore_duplicated_angle_prm": "true",
+    "use_fmm": "false"
 }

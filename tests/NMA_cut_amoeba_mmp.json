@@ -5,5 +5,6 @@
         "path": "tests/N-methylacetamide/input_AMOEBA_CUT.mmp",
         "md5sum": "1a6f9762ed644388c3bd6aa180567e8a"
     },
-    "verbosity": "high"
+    "verbosity": "high",
+    "use_fmm": "false"
 }

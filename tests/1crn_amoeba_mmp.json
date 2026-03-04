@@ -5,5 +5,6 @@
         "path": "tests/1crn/input_AMOEBA.mmp",
         "md5sum": "cd2bbc50b9cda7330bc3828a774206a1"
     },
-    "verbosity": "high"
+    "verbosity": "high",
+    "use_fmm": "false"
 }

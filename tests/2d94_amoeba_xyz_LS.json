@@ -11,5 +11,6 @@
     },
     "verbosity": "high",
     "ignore_duplicated_prm": "true",
-    "vdw_cutoff": 12.0
+    "vdw_cutoff": 12.0,
+    "use_fmm": "false"
 }
