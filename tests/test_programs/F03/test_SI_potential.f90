@@ -56,7 +56,7 @@ program test_SI_potential
         end if
 
         em   = ommp_get_fixedelec_energy(my_system)
-        call ommp_set_external_field(my_system, ef, OMMP_SOLVER_NONE, OMMP_MATV_NONE)
+        call ommp_set_external_field(my_system, ef, OMMP_SOLVER_NONE, OMMP_MATV_NONE,1)
         deallocate(ef)
         
         ep   = ommp_get_polelec_energy(my_system)
