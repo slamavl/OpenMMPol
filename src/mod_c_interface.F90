@@ -286,7 +286,7 @@ module mod_ommp_C_interface
         end subroutine
        
         ! Interface for normal operation of OMMP System Object
-        subroutine C_ommp_set_external_field(s_prt, ext_field_prt, solver, matv) &
+        subroutine C_ommp_set_external_field(s_prt, ext_field_prt, solver, matv,add_mm_field) &
                 bind(c, name='ommp_set_external_field')
             implicit none
             
@@ -294,6 +294,7 @@ module mod_ommp_C_interface
             type(c_ptr), value :: ext_field_prt
             integer(ommp_integer), intent(in), value :: solver
             integer(ommp_integer), intent(in), value :: matv
+            integer(ommp_integer), intent(in), value :: add_mm_field
             
             type(ommp_system), pointer :: s
             real(ommp_real), pointer :: ext_field(:,:)
@@ -301,7 +302,7 @@ module mod_ommp_C_interface
             call c_f_pointer(s_prt, s)
             call c_f_pointer(ext_field_prt, ext_field, [3_ommp_integer, s%eel%pol_atoms])
 
-            call ommp_set_external_field(s, ext_field, solver, matv, .true.)
+            call ommp_set_external_field(s, ext_field, solver, matv, add_mm_field)
         end subroutine C_ommp_set_external_field
         
         subroutine C_ommp_set_external_field_nomm(s_prt, ext_field_prt, solver, matv) &
@@ -321,7 +322,7 @@ module mod_ommp_C_interface
             call c_f_pointer(s_prt, s)
             call c_f_pointer(ext_field_prt, ext_field, [3_ommp_integer, s%eel%pol_atoms])
             
-            call ommp_set_external_field(s, ext_field, solver, matv, .false.)
+            call ommp_set_external_field(s, ext_field, solver, matv, 0)
         end subroutine C_ommp_set_external_field_nomm
 
         subroutine C_ommp_potential_mmpol2ext(s_prt, n, cext, v) &

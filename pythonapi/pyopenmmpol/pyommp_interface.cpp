@@ -482,7 +482,8 @@ class OMMPSystem{
         void set_external_field(py_cdarray ext_field, 
                                 bool nomm = false, 
                                 std::string solver = "none",
-                                std::string matv = "none"){
+                                std::string matv = "none",
+                                int add_mm_field = 1){
             if(ext_field.ndim() != 2 || 
                ext_field.shape(0) != get_pol_atoms() ||
                ext_field.shape(1) != 3){
@@ -498,7 +499,7 @@ class OMMPSystem{
             }
 
             if(! nomm)
-                ommp_set_external_field(handler, ext_field.data(), solvers[solver], matvs[matv]);
+                ommp_set_external_field(handler, ext_field.data(), solvers[solver], matvs[matv],add_mm_field);
             else
                 ommp_set_external_field_nomm(handler, ext_field.data(), solvers[solver], matvs[matv]);
             return ;
@@ -1417,7 +1418,8 @@ PYBIND11_MODULE(__pyopenmmpol, m){
              py::arg("external_field"),
              py::arg("nomm") = false,
              py::arg("solver") = "none",
-             py::arg("matv") = "none")
+             py::arg("matv") = "none",
+             py::arg("add_mm_field") = 1)
         
         .def("get_bond_energy", &OMMPSystem::get_bond_energy, "Compute the energy of bond stretching")
         .def("get_angle_energy", &OMMPSystem::get_angle_energy, "Compute the energy of angle bending")

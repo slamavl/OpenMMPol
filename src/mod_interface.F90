@@ -195,7 +195,7 @@ module ommp_interface
             real(ommp_real), intent(in) :: ext_field(3,sys_obj%eel%pol_atoms)
             integer(ommp_integer), intent(in), value :: solver
             integer(ommp_integer), intent(in), value :: matv
-            logical, intent(in), value, optional :: add_mm_field
+            integer(ommp_integer), intent(in), value :: add_mm_field
             
             type(ommp_electrostatics_type), pointer :: eel
             real(ommp_real), allocatable :: ef(:,:,:)
@@ -204,8 +204,8 @@ module ommp_interface
 
             eel => sys_obj%eel
 
-            if(present(add_mm_field)) then
-                do_mm_f = add_mm_field
+            if (add_mm_field == 0) then
+                do_mm_f = .false.
             else
                 do_mm_f = .true.
             end if
@@ -244,7 +244,7 @@ module ommp_interface
             integer(ommp_integer), intent(in), value :: solver
             integer(ommp_integer), intent(in), value :: matv
 
-            call ommp_set_external_field(sys_obj, ext_field, solver, matv, .false.)
+            call ommp_set_external_field(sys_obj, ext_field, solver, matv, 0)
         end subroutine
         
         subroutine ommp_potential_mmpol2ext(s, n, cext, v)
